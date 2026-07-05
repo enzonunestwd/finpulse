@@ -1,0 +1,56 @@
+version: '3.8'
+
+# ── SERVIÇOS ──────────────────────────────────────────────────────────
+services:
+
+  # ── 1. BANCO DE DADOS (PostgreSQL) ───────────────────────────────────
+  db:
+    image: postgres:16-alpine          # imagem oficial do PostgreSQL
+    container_name: finpulse-db
+    environment:
+      POSTGRES_DB: finpulse            # nome do banco criado automaticamente
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: finpulse123   # senha do banco (só local)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # persiste os dados mesmo reiniciando
+    ports:
+      - "5432:5432"                    # expõe pra você acessar com DBeaver/pgAdmin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── 2. BACKEND (Spring Boot) ──────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend/finpulse-api  # onde está o Dockerfile do backend
+    container_name: finpulse-backend
+    environment:
+      # Variáveis de ambiente — substituem o application.yml
+      DATABASE_URL: jdbc:postgresql://db:5432/finpulse
+      # "db" é o nome do serviço acima — Docker resolve o endereço automaticamente
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: finpulse123
+      JWT_SECRET: finpulse-chave-secreta-local-32-chars-min
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8080:8080"                    # API acessível em localhost:8080
+    depends_on:
+      db:
+        condition: service_healthy     # só sobe depois que o banco estiver pronto
+    restart: on-failure
+
+  # ── 3. FRONTEND (React + Nginx) ───────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend              # onde está o Dockerfile do frontend
+    container_name: finpulse-frontend
+    ports:
+      - "3000:80"                      # app acessível em localhost:3000
+    depends_on:
+      - backend                        # só sobe depois do backend
+
+# ── VOLUMES ───────────────────────────────────────────────────────────
+volumes:
+  postgres_data:                       # volume nomeado — persiste os dados do banco

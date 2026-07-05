@@ -1,0 +1,29 @@
+# ── BACKEND ───────────────────────────────────────────────────────────
+backend/finpulse-api/target/
+backend/finpulse-api/.idea/
+backend/finpulse-api/*.iml
+backend/finpulse-api/*.iws
+
+# ── FRONTEND ──────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── AMBIENTE E SEGREDOS ───────────────────────────────────────────────
+.env
+.env.local
+*.env.local
+application-local.yml
+
+# ── SISTEMA OPERACIONAL ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── DOCKER ────────────────────────────────────────────────────────────
+# (o docker-compose.yml VAI pro Git — queremos versionar a configuração)
+# Mas volumes locais não:
+postgres_data/
+
+# ── LOGS ──────────────────────────────────────────────────────────────
+*.log
+logs/

@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: finpulse-api
+
+  datasource:
+    # Em desenvolvimento local, use suas credenciais do PostgreSQL.
+    # Em produção (Railway), essas variáveis são injetadas automaticamente
+    # pelo próprio Railway quando você conecta um banco PostgreSQL ao serviço.
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/finpulse}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      # "update": o Hibernate atualiza o schema do banco automaticamente
+      # com base nas entidades JPA. Bom para desenvolvimento.
+      # Em produção real, use "validate" e gerencie migrations com Flyway/Liquibase.
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# Configurações do JWT — em produção, injete via variável de ambiente,
+# NUNCA deixe a secret hardcoded no código ou no repositório Git.
+jwt:
+  secret: ${JWT_SECRET:finpulse-secret-key-deve-ter-pelo-menos-32-caracteres-para-hs256}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 horas em milissegundos
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    com.enzo.finpulse: INFO
+    org.springframework.security: WARN
