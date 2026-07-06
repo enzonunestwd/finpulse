@@ -342,16 +342,6 @@ transactions   → lançamentos financeiros (vinculados a account + category + u
 
 ## 📬 Contato
 
-**Enzo Nunes Andrade**
-
 * **GitHub:** [@enzonunestwd](https://github.com/enzonunestwd)
 * **LinkedIn:** [@enzonunesdf](https://www.linkedin.com/in/enzonunesdf)
 * **Email:** [enzonunestwd@gmail.com](mailto:enzonunestwd@gmail.com)
-
----
-
-<div align="center">
-
-Desenvolvido com ☕ Java e muito aprendizado
-
-</div>
