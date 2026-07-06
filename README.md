@@ -43,32 +43,33 @@ O front-end foi desenvolvido em **React 18** com **Vite**, utilizando **Tailwind
 ### Dashboard Principal
 > Cards de resumo financeiro + gráfico de pizza (despesas por categoria) + gráfico de barras (receitas por categoria). Dados calculados em tempo real a partir das transações do mês atual.
 
-<!-- Screenshot: adicione aqui uma imagem do dashboard -->
-<!-- ![Dashboard](docs/screenshots/dashboard.png) -->
+<img width="1920" height="865" alt="image" src="https://github.com/user-attachments/assets/aae0c585-f81f-4e90-9827-4b172aa8cf12" />
+
+
 
 ---
 
 ### Tela de Transações
 > Listagem de todos os lançamentos financeiros com data, valor, conta e categoria. Formulário inline para criação de novas transações com seleção de conta e categoria.
 
-<!-- Screenshot: adicione aqui uma imagem das transações -->
-<!-- ![Transações](docs/screenshots/transactions.png) -->
+<img width="1920" height="861" alt="image" src="https://github.com/user-attachments/assets/43df0f44-2fde-4ebd-97b2-b5de831b019f" />
+
 
 ---
 
 ### Tela de Metas Financeiras
 > Cards de metas com barra de progresso animada, percentual de conclusão e funcionalidade de aporte incremental.
 
-<!-- Screenshot: adicione aqui uma imagem das metas -->
-<!-- ![Metas](docs/screenshots/goals.png) -->
+<img width="1920" height="859" alt="image" src="https://github.com/user-attachments/assets/87c15c07-5acb-43c5-849b-0828c22f3485" />
+
 
 ---
 
 ### Tela de Contas
 > Grid de contas financeiras com ícones por tipo (corrente, cartão, investimento, poupança), saldo individual e saldo total consolidado.
 
-<!-- Screenshot: adicione aqui uma imagem das contas -->
-<!-- ![Contas](docs/screenshots/accounts.png) -->
+<img width="1920" height="863" alt="image" src="https://github.com/user-attachments/assets/05b2aab8-c1b8-42fb-bf59-a8252239af46" />
+
 
 ---
 
@@ -146,25 +147,6 @@ finpulse/
 | Docker | Containerização da aplicação |
 | Docker Compose | Orquestração de múltiplos containers |
 | Nginx | Servidor web para o frontend em produção |
-
----
-
-## 🔑 Decisões Técnicas
-
-### Por que BigDecimal para valores monetários?
-`double` e `float` usam representação binária de ponto flutuante que não consegue representar exatamente certos decimais (ex: `0.1 + 0.2 = 0.30000000000000004`). Em sistemas financeiros, esse erro de arredondamento é inaceitável. `BigDecimal` garante precisão exata.
-
-### Por que @Transactional no registro de transações?
-Ao registrar um lançamento financeiro, dois registros precisam ser salvos atomicamente: a transação em si e a atualização do saldo da conta. `@Transactional` garante que, se qualquer operação falhar, **ambas são desfeitas** — nunca ficamos com saldo inconsistente no banco.
-
-### Por que DTOs em vez de expor as entidades diretamente?
-Três razões: **segurança** (a entidade `User` contém `senhaHash`), **desacoplamento** (mudanças no banco não afetam o contrato com o frontend), e **flexibilidade** (`TransactionResponse` combina dados de `Account` e `Category` em uma única resposta).
-
-### Por que JWT stateless e não sessão?
-A API não armazena nenhum estado de sessão no servidor. Cada requisição autentica-se de forma independente via token. Isso permite **escala horizontal** sem sessões compartilhadas ou sticky sessions.
-
-### Prevenção de IDOR
-Todos os repositórios usam `findByIdAndUserId` — um recurso só é retornado se pertencer ao usuário autenticado. Mesmo manipulando IDs na URL, um usuário nunca acessa dados de outro.
 
 ---
 
