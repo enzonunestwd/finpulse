@@ -340,9 +340,12 @@ transactions   → lançamentos financeiros (vinculados a account + category + u
 
 **Enzo Nunes Andrade**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Enzo_Nunes-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/enzonunestwd)
-[![GitHub](https://img.shields.io/badge/GitHub-enzonunestwd-181717?style=flat-square&logo=github)](https://github.com/enzonunestwd)
-[![Email](https://img.shields.io/badge/Email-enzonunestwd@gmail.com-EA4335?style=flat-square&logo=gmail)](mailto:enzonunestwd@gmail.com)
+📫 Contato
+Enzo Nunes Andrade
+
+GitHub: @enzonunestwd
+LinkedIn: @enzonunesdf
+E-mail: enzonunestwd@gmail.com
 
 ---
 
