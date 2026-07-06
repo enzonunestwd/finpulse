@@ -35,7 +35,8 @@ O front-end foi desenvolvido em **React 18** com **Vite**, utilizando **Tailwind
 > Layout split: branding à esquerda, formulário à direita. Autenticação com validação em tempo real e feedback de erro.
 
 <!-- Screenshot: adicione aqui uma imagem da tela de login -->
-<!-- ![Login](docs/screenshots/login.png) -->
+<!-- ![Login](docs/screenshots/login.png) --><img width="1920" height="862" alt="image" src="https://github.com/user-attachments/assets/d3b5a9ca-4c8b-41a3-b734-db7cd502d0f1" />
+
 
 ---
 
