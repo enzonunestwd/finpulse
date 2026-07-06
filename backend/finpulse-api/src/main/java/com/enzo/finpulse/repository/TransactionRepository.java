@@ -39,13 +39,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     // Agrupa o total gasto/recebido por categoria em um período.
     // Resultado: lista de [nomeCategoria, totalSomado] — usada no gráfico de pizza.
     @Query("""
-            SELECT c.nome AS categoria, COALESCE(SUM(t.valor), 0) AS total
+            SELECT t.category AS categoria, COALESCE(SUM(t.valor), 0) AS total
             FROM Transaction t
-            JOIN t.category c
             WHERE t.user.id = :userId
             AND t.tipo = :tipo
             AND t.dataTransacao BETWEEN :inicio AND :fim
-            GROUP BY c.nome
+            GROUP BY t.category
             ORDER BY total DESC
             """)
     List<Object[]> somarPorCategoriaEPeriodo(

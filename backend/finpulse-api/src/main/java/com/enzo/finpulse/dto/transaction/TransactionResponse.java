@@ -14,9 +14,9 @@ public record TransactionResponse(
         LocalDate dataTransacao,
         Long accountId,
         String accountNome,
-        Long categoryId,
+        Long categoryId,   // Ficará nulo já que agora é texto livre
         String categoryNome,
-        String categoryCor
+        String categoryCor // Ficará nulo já que agora é texto livre
 ) {
     public static TransactionResponse fromEntity(Transaction t) {
         return new TransactionResponse(
@@ -27,9 +27,9 @@ public record TransactionResponse(
                 t.getDataTransacao(),
                 t.getAccount().getId(),
                 t.getAccount().getNome(),
-                t.getCategory().getId(),
-                t.getCategory().getNome(),
-                t.getCategory().getCor()
+                null,             // 🧠 MUDOU AQUI: Passa null pois não existe mais ID de tabela
+                t.getCategory(),  // 🧠 MUDOU AQUI: Pega a própria String direto da transação
+                null              // 🧠 MUDOU AQUI: Passa null pois texto livre não tem cor cadastrada
         );
     }
 }

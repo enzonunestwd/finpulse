@@ -25,7 +25,7 @@ public record TransactionRequest(
         @NotNull(message = "A conta é obrigatória")
         Long accountId,
 
-        @NotNull(message = "A categoria é obrigatória")
-        Long categoryId
+        @NotBlank(message = "A categoria é obrigatória")
+        String categoryNome
 ) {
 }

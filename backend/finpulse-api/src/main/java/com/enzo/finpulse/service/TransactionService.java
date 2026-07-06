@@ -47,9 +47,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Conta não encontrada com id: " + request.accountId()));
 
-        Category categoria = categoryRepository.findByIdAndUserId(request.categoryId(), usuario.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Categoria não encontrada com id: " + request.categoryId()));
+        // O bloco de buscar a categoria por ID foi removido daqui, pois agora ela é um texto livre.
 
         Transaction transacao = Transaction.builder()
                 .descricao(request.descricao())
@@ -57,7 +55,7 @@ public class TransactionService {
                 .tipo(request.tipo())
                 .dataTransacao(request.dataTransacao())
                 .account(conta)
-                .category(categoria)
+                .category(request.categoryNome()) // Recebe a String enviada pelo front-end diretamente
                 .user(usuario)
                 .build();
 

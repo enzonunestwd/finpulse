@@ -24,6 +24,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Transaction {
 
+    // 🚀 COLE ISTO NO LUGAR:
+    @Column(name = "category_nome")
+    private String category;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,9 +53,6 @@ public class Transaction {
     @JsonBackReference
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -8,7 +8,7 @@ spring:
     # pelo próprio Railway quando você conecta um banco PostgreSQL ao serviço.
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/finpulse}
     username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
+    password: ${DATABASE_PASSWORD:A123B456!}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,7 +16,7 @@ spring:
       # "update": o Hibernate atualiza o schema do banco automaticamente
       # com base nas entidades JPA. Bom para desenvolvimento.
       # Em produção real, use "validate" e gerencie migrations com Flyway/Liquibase.
-      ddl-auto: update
+      ddl-auto: update # 🧠 MUDOU AQUI: Configurado como 'create' temporariamente para recriar o banco
     show-sql: false
     properties:
       hibernate:

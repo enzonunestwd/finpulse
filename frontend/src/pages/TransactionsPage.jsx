@@ -13,43 +13,56 @@ function formatDate(date) {
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState([])
   const [accounts, setAccounts] = useState([])
-  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+
   const [form, setForm] = useState({
-    descricao: '', valor: '', tipo: 'DESPESA',
+    descricao: '',
+    valor: '',
+    tipo: 'DESPESA',
     dataTransacao: new Date().toISOString().split('T')[0],
-    accountId: '', categoryId: ''
+    accountId: '',
+    categoryNome: '' // Igual ao seu DTO no Java
   })
 
   useEffect(() => {
     Promise.all([
       api.get('/transactions'),
       api.get('/accounts'),
-      api.get('/categories'),
-    ]).then(([t, a, c]) => {
+    ]).then(([t, a]) => {
       setTransactions(t.data)
       setAccounts(a.data)
-      setCategories(c.data)
     }).finally(() => setLoading(false))
   }, [])
-
-  const categoriasFiltradas = categories.filter(c => c.tipo === form.tipo)
 
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      const { data } = await api.post('/transactions', {
-        ...form,
+      // Ajustado para enviar exatamente o formato que o seu Spring Boot espera
+      await api.post('/transactions', {
+        descricao: form.descricao,
         valor: parseFloat(form.valor),
-        accountId: parseInt(form.accountId),
-        categoryId: parseInt(form.categoryId),
+        tipo: form.tipo,
+        dataTransacao: form.dataTransacao,
+        accountId: Number(form.accountId), // Garante que vai como número compatível com Long
+        categoryNome: form.categoryNome // String direta enviada para o service
       })
-      setTransactions(prev => [data, ...prev])
+
+      // Recarrega as transações para garantir sincronia com os IDs gerados pelo banco
+      const t = await api.get('/transactions')
+      setTransactions(t.data)
+
       setShowForm(false)
-      setForm({ descricao: '', valor: '', tipo: 'DESPESA', dataTransacao: new Date().toISOString().split('T')[0], accountId: '', categoryId: '' })
+      setForm({
+        descricao: '',
+        valor: '',
+        tipo: 'DESPESA',
+        dataTransacao: new Date().toISOString().split('T')[0],
+        accountId: '',
+        categoryNome: ''
+      })
     } catch (err) {
-      alert(err.response?.data?.mensagem || 'Erro ao salvar transação.')
+      alert(err.response?.data?.mensagem || 'Erro ao salvar transação. Verifique os campos.')
     }
   }
 
@@ -88,7 +101,7 @@ export default function TransactionsPage() {
               <label className="block text-sm text-text-secondary mb-1.5">Tipo</label>
               <select
                 value={form.tipo}
-                onChange={e => setForm(p => ({ ...p, tipo: e.target.value, categoryId: '' }))}
+                onChange={e => setForm(p => ({ ...p, tipo: e.target.value }))}
                 className="input"
               >
                 <option value="DESPESA">Despesa</option>
@@ -141,18 +154,16 @@ export default function TransactionsPage() {
               </select>
             </div>
 
+            {/* Campo de Categoria Escrita por extenso */}
             <div>
               <label className="block text-sm text-text-secondary mb-1.5">Categoria</label>
-              <select
-                value={form.categoryId}
-                onChange={e => setForm(p => ({ ...p, categoryId: e.target.value }))}
+              <input
+                type="text"
+                value={form.categoryNome}
+                onChange={e => setForm(p => ({ ...p, categoryNome: e.target.value }))}
+                placeholder="Ex: Alimentação"
                 required className="input"
-              >
-                <option value="">Selecione a categoria</option>
-                {categoriasFiltradas.map(c => (
-                  <option key={c.id} value={c.id}>{c.nome}</option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="md:col-span-2 flex gap-3 justify-end">
@@ -187,7 +198,7 @@ export default function TransactionsPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-text-primary text-sm font-medium truncate">{t.descricao}</p>
                   <p className="text-text-secondary text-xs mt-0.5">
-                    {t.categoryNome} · {t.accountNome} · {formatDate(t.dataTransacao)}
+                    {t.categoryNome || t.categoria?.nome} · {t.accountNome || t.account?.nome} · {formatDate(t.dataTransacao)}
                   </p>
                 </div>
                 <p className={`money text-sm font-semibold shrink-0 ${t.tipo === 'RECEITA' ? 'text-accent' : 'text-danger'}`}>
